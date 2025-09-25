@@ -1,0 +1,11 @@
+patterns:
+  sid: "-SID\s*([0-9.e\+]+)"
+  typ: "TYP/([^\s\)]+)"
+  add: "-ADD\s*(\d{6})"
+  atd: "-ATD\s*(\d{4})"
+  adepz: "-ADEPZ\s*([^\s\n]+)"
+  adep: "-ADEP\s+([A-ZА-ЯЁ0-9 ,\.]+)"
+  ada: "-ADA\s*(\d{6})"
+  ata: "-ATA\s*(\d{4})"
+  adarrz: "-ADARRZ\s*([^\s\n]+)"
+  adarr: "-ADARR\s+([A-ZА-ЯЁ0-9 ,\.]+)"

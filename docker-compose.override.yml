@@ -1,0 +1,15 @@
+﻿version: "3.8"
+
+services:
+  api:
+    volumes:
+      - ./api:/app
+
+  worker:
+    volumes:
+      - ./api:/app
+
+  datalens:
+    volumes:
+      - ./datalens:/app
+      - datalens_home:/app/.datalens

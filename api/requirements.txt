@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-dateutil
+psycopg2-binary
+pandas
+pyyaml
+celery[redis]
+aiofiles

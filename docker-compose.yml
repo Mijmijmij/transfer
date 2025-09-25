@@ -1,0 +1,58 @@
+﻿version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: flights_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    depends_on: [db, redis]
+    volumes:
+      - shared-data:/data
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/flights_db
+      CELERY_BROKER_URL: redis://redis:6379/0
+
+  worker:
+    build: ./api
+    command: ["celery", "-A", "celery_app.celery", "worker", "--loglevel=info"]
+    depends_on: [db, redis]
+    volumes:
+      - shared-data:/data
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/flights_db
+      CELERY_BROKER_URL: redis://redis:6379/0
+
+  datalens:
+    build:
+      context: ./datalens
+      dockerfile: docker-compose.yaml
+    ports:
+      - "8080:8080"
+    depends_on: [db]
+    environment:
+      HC: "1"
+      UI_PORT: "8080"
+      DL_POSTGRES_HOST: db
+      DL_POSTGRES_PORT: "5432"
+      DL_POSTGRES_DB: flights_db
+      DL_POSTGRES_USER: postgres
+      DL_POSTGRES_PASSWORD: password
+    volumes:
+      - datalens_home:/app/.datalens
+
+volumes:
+  postgres_data:
+  shared-data:
+  datalens_home:
